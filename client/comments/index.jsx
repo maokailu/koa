@@ -1,6 +1,7 @@
 import React from 'react';
 import { request } from '../utils';
 import './style.scss';
+var img = new Image();
 export default class Comments extends React.Component {
     constructor(props) {
         super(props);
@@ -12,22 +13,38 @@ export default class Comments extends React.Component {
         nextComments: []
     }
     componentDidMount() {
-        this.init();
+        this.getComments();
     }
-    init = () =>{
-        request('queryComments').then(json => {
+    getComments = () =>{
+        if(this.state.nextComments.length!==0) {
+            let comments = this.state.comments.concat(this.state.nextComments);
             this.setState({
-                comments: json
-            },()=>{
-                request('queryComments').then(json => {
-                    this.setState({
-                        nextComments: json
-                    })
-                })
+                comments: comments
             })
-        }, error => {
-            console.error('出错了', error);
-        });
+            request('queryComments').then(json => {
+                this.setState({
+                    nextComments: json
+                })
+            }, error => {
+                console.error('出错了', error);
+            });
+            comments = comments.concat(this.state.nextComments);
+        } else {
+            request('queryComments').then(json => {
+                this.setState({
+                    comments: json
+                },()=>{
+                    request('queryComments').then(json => {
+                        this.setState({
+                            nextComments: json
+                        })
+                    });
+                    this.proLoadImg();
+                })
+            }, error => {
+                console.error('出错了', error);
+            });
+        }
     }
     inputComments = event => {
         this.setState({
@@ -52,14 +69,21 @@ export default class Comments extends React.Component {
           this.init();
     }
     getMore =() =>{
-        const comments = this.state.comments.concat(this.state.nextComments);
-        this.setState({
-            comments: comments
-        })
+    }
+    proLoadImg = () => {
+        if (document.images) {
+            img.src = '/triplogo.png';
+        }
+    }
+    addImg = () =>{
+        const div = document.getElementById('img');
+        div.appendChild(img);
     }
     render() {
         return (
             <div>
+                <div onClick={this.addImg}>查看图片</div>
+                <div id="img"></div>
                 <div>留言板</div>
                 <input className="input-box" onChange={this.inputComments}
                     placeholder={'在这里输入你的留言'} type="text" value={this.state.newComment} />
@@ -72,7 +96,7 @@ export default class Comments extends React.Component {
                         </div>
                     )}
                  </div>
-                 <span onClick={this.getMore}>加载更多</span>
+                 <span onClick={this.getComments}>加载更多</span>
                  {/* 改成滚动到底部 */}
             </div>
        );

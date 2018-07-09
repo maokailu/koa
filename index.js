@@ -17,5 +17,6 @@ app.use(require('koa-webpack-dev-middleware')(compiler, {
 app.use(require('koa-webpack-hot-middleware')(compiler));
 // 解析静态资源
 app.use(serve(path.join(__dirname, 'dist')))
+app.use(serve(path.join(__dirname + 'client')));
 
 app.listen(3000);
