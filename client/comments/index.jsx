@@ -1,7 +1,8 @@
 import React from 'react';
 import { request } from '../utils';
 import './style.scss';
-var img = new Image();
+let img = new Image();
+let isBottom = false;
 export default class Comments extends React.Component {
     constructor(props) {
         super(props);
@@ -14,12 +15,16 @@ export default class Comments extends React.Component {
     }
     componentDidMount() {
         this.getComments();
+        window.addEventListener('scroll', this.isBottom);
     }
     getComments = () =>{
         if(this.state.nextComments.length!==0) {
             let comments = this.state.comments.concat(this.state.nextComments);
             this.setState({
                 comments: comments
+            },()=>{
+                // 加载完下一屏继续监听
+                isBottom = false;
             })
             request('queryComments').then(json => {
                 this.setState({
@@ -68,8 +73,6 @@ export default class Comments extends React.Component {
           });
           this.init();
     }
-    getMore =() =>{
-    }
     proLoadImg = () => {
         if (document.images) {
             img.src = '/triplogo.png';
@@ -78,6 +81,17 @@ export default class Comments extends React.Component {
     addImg = () =>{
         const div = document.getElementById('img');
         div.appendChild(img);
+    }
+    isBottom = () =>{
+        const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+        const clientHeight  = document.documentElement.clientHeight ;
+        const scrollHeight = document.body.scrollHeight   || document.documentElement.scrollHeight;
+        console.log(scrollTop, clientHeight, scrollHeight)
+        if(!isBottom && (scrollTop + clientHeight >= scrollHeight - 50)){
+            console.log("已经到最底部了");
+            isBottom = true;
+            this.getComments();
+    　　}
     }
     render() {
         return (
