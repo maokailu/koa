@@ -27,6 +27,10 @@ var queryComments = async (ctx, next) => {
         {text: 3, id: 3},
         {text: 3, id: 3},
         {text: 3, id: 3},
+        {text: 0, id: 0},
+        {text: 1, id: 1},
+        {text: 2, id: 2},
+        {text: 3, id: 3}
     ]
     ctx.response.body = tmp;
 };

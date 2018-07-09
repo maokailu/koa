@@ -8,7 +8,8 @@ export default class Comments extends React.Component {
 
     state = {
         comments: [],
-        newComment: ''
+        newComment: '',
+        nextComments: []
     }
     componentDidMount() {
         this.init();
@@ -17,10 +18,16 @@ export default class Comments extends React.Component {
         request('queryComments').then(json => {
             this.setState({
                 comments: json
+            },()=>{
+                request('queryComments').then(json => {
+                    this.setState({
+                        nextComments: json
+                    })
+                })
             })
-          }, error => {
-              console.error('出错了', error);
-          });
+        }, error => {
+            console.error('出错了', error);
+        });
     }
     inputComments = event => {
         this.setState({
@@ -44,6 +51,12 @@ export default class Comments extends React.Component {
           });
           this.init();
     }
+    getMore =() =>{
+        const comments = this.state.comments.concat(this.state.nextComments);
+        this.setState({
+            comments: comments
+        })
+    }
     render() {
         return (
             <div>
@@ -59,6 +72,8 @@ export default class Comments extends React.Component {
                         </div>
                     )}
                  </div>
+                 <span onClick={this.getMore}>加载更多</span>
+                 {/* 改成滚动到底部 */}
             </div>
        );
     }
