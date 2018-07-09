@@ -12,9 +12,22 @@ var fn_index = async (ctx, next) => {
     ctx.response.body = ret;
 };
 var queryComments = async (ctx, next) => {
-    var tmp = await sql.query("select * from comments;", []).then(function(result) {
-        return result;
-    });
+    // var tmp = await sql.query("select * from comments;", []).then(function(result) {
+    //     return result;
+    // });
+    const tmp = [
+        {text: 0, id: 0},
+        {text: 1, id: 1},
+        {text: 2, id: 2},
+        {text: 3, id: 3},
+        {text: 3, id: 3},
+        {text: 3, id: 3},
+        {text: 3, id: 3},
+        {text: 3, id: 3},
+        {text: 3, id: 3},
+        {text: 3, id: 3},
+        {text: 3, id: 3},
+    ]
     ctx.response.body = tmp;
 };
 var addComment = async (ctx, next) => {

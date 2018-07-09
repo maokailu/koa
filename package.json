@@ -19,7 +19,7 @@
   "version": "0.0.1",
   "description": "koa2",
   "scripts": {
-    "start": "webpack && nodemon index.js"
+    "start": "nodemon index.js"
   },
   "author": "maokl",
   "license": "",

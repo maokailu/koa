@@ -1,15 +1,16 @@
 const webpack = require('webpack');
+const path = require('path');
 module.exports = {
     devtool: 'none',
-    entry: __dirname + '/client/index.jsx',
+    entry: [
+        'webpack-hot-middleware/client', // koa-webpack-hot-middlewate无效
+        path.resolve(__dirname, './client/index.jsx'),
+      ],
     output: {
-        path: __dirname + '/dist',
-        publicPath: __dirname + '/dist',
+        path: path.resolve(__dirname + '/dist'),
+        publicPath: '/',
         filename: 'bundle.js'
     },
-    // devServer: {
-    //     contentBase: 'http://localhost:3000'
-    // },
     resolve: {
         extensions: ['.js', '.jsx', '.json', 'ts', 'tsx'],
         alias: {
