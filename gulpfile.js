@@ -3,12 +3,12 @@ var rename = require('gulp-rename');
 var browserSync = require('browser-sync').create();
 var nodemon = require('gulp-nodemon');
 gulp.task('js', function () {
-    return gulp.src(['client/comments/index.jsx'])
+    return gulp.src(['client/pages/comments/index.jsx'])
         .pipe(rename('bundle.js'))
         .pipe(gulp.dest('dist'))
 });
 gulp.task('watch', function () {
-    return gulp.watch('client/comments/*.jsx', ['js']);
+    return gulp.watch('client/pages/comments/*.jsx', ['js']);
 });
 gulp.task('serve', function() {
     nodemon({ 

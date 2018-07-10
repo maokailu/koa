@@ -1,6 +1,8 @@
 import React from 'react';
-import { request } from '../utils';
+import { request } from '../../utils';
 import './style.scss';
+import {ThemeContext, themes} from '../../components/button/context';
+import ThemedButton from '../../components/button';
 let img = new Image();
 let isBottom = false;
 export default class Comments extends React.Component {
@@ -11,7 +13,8 @@ export default class Comments extends React.Component {
     state = {
         comments: [],
         newComment: '',
-        nextComments: []
+        nextComments: [],
+        theme: themes.light
     }
     componentDidMount() {
         this.getComments();
@@ -93,9 +96,21 @@ export default class Comments extends React.Component {
             this.getComments();
     　　}
     }
+    toggleTheme = () => {
+        this.setState(state => ({
+          theme:
+            state.theme === themes.dark
+              ? themes.light
+              : themes.dark,
+        }));
+    }
     render() {
         return (
             <div>
+                <ThemedButton />
+                <ThemeContext.Provider value={this.state.theme}>
+                    <Toolbar changeTheme={this.toggleTheme} />
+                </ThemeContext.Provider>
                 <div onClick={this.addImg}>查看图片</div>
                 <div id="img"></div>
                 <div>留言板</div>
@@ -115,4 +130,12 @@ export default class Comments extends React.Component {
             </div>
        );
     }
+}
+// 一个使用到ThemedButton组件的中间组件
+function Toolbar(props) {
+    return (
+      <ThemedButton onClick={props.changeTheme}>
+        Change Theme
+      </ThemedButton>
+    );
 }
