@@ -61,7 +61,7 @@ export default class Comments extends React.Component {
             this.setState({
                 newComment: ''
             })
-            this.init();
+            // this.init();
           }, error => {
               console.error('出错了', error);
           });
@@ -71,7 +71,7 @@ export default class Comments extends React.Component {
           }, error => {
               console.error('出错了', error);
           });
-          this.init();
+        //   this.init();
     }
     proLoadImg = () => {
         if (document.images) {
@@ -104,7 +104,7 @@ export default class Comments extends React.Component {
                 <span onClick={this.addComment} className="comfirm-btn">留言</span>
                  <div>
                     {this.state.comments && this.state.comments.map((comment, index) =>
-                        <div className="item">
+                        <div className="item" key={index}>
                             <span>{comment.text}</span>
                             <span onClick={()=>this.deleteComment(comment.id)} className="comfirm-btn">删除</span>
                         </div>
