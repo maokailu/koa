@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 module.exports = {
     mode: 'development',
-    devtool: 'none',
+    devtool: 'source-map',
     entry: [
         'webpack-hot-middleware/client', // koa-webpack-hot-middlewate无效
         path.resolve(__dirname, './client/index.jsx'),
