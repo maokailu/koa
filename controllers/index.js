@@ -3,36 +3,28 @@
 var ejs = require('ejs');
 var sql = require('../config/db');
 
-var fn_index = async (ctx, next) => {
-    var path = `./views/index.ejs`;
-    var str = require('fs').readFileSync(path, 'utf8');
-    var ret = ejs.render(str, {
+const fn_index = async (ctx, next) => {
+    const path = `./views/index.ejs`;
+    const str = require('fs').readFileSync(path, 'utf8');
+    const ret = ejs.render(str, {
         filename: path
     });
     ctx.response.body = ret;
 };
-var queryComments = async (ctx, next) => {
-    // var tmp = await sql.query("select * from comments;", []).then(function(result) {
-    //     return result;
-    // });
-    const tmp = [
-        {text: 0, id: 0},
-        {text: 1, id: 1},
-        {text: 2, id: 2},
-        {text: 3, id: 3},
-        {text: 3, id: 3},
-        {text: 3, id: 3},
-    ]
-    ctx.response.body = tmp;
-};
-var addComment = async (ctx, next) => {
-    var tmp = await sql.query("insert into comments (text) values (?)", [ctx.request.body.text]).then(function(result) {
+const queryComments = async (ctx, next) => {
+    const tmp = await sql.query("select * from comments where id >= (? * 10) limit ?", [ctx.request.body.page || 0, ctx.request.body.counts || 1000]).then(function(result) {
         return result;
     });
     ctx.response.body = tmp;
 };
-var deleteComment = async (ctx, next) => {
-    var tmp = await sql.query("delete from comments where id = ?", [ctx.request.body.id]).then(function(result) {
+const addComment = async (ctx, next) => {
+    const tmp = await sql.query("insert into comments (text) values (?)", [ctx.request.body.text]).then(function(result) {
+        return result;
+    });
+    ctx.response.body = tmp;
+};
+const deleteComment = async (ctx, next) => {
+    const tmp = await sql.query("delete from comments where id = ?", [ctx.request.body.id]).then(function(result) {
         return result;
     });
     ctx.response.body = tmp;
