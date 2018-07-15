@@ -1,5 +1,5 @@
 import React from 'react';
-import { request } from '../../utils';
+import { request, debounce } from '../../utils';
 import './style.scss';
 import {ThemeContext, themes} from '../../components/button/context';
 import ThemedButton from '../../components/button';
@@ -22,7 +22,7 @@ export default class Comments extends React.Component {
     }
     componentDidMount() {
         this.init();
-        window.addEventListener('scroll', this.isBottom);
+        window.addEventListener('scroll', debounce(200, this.isBottom));
     }
     init = () => {
         request('queryComments', {page: page, counts: this.props.counts }).then(json => {
@@ -93,10 +93,10 @@ export default class Comments extends React.Component {
         div.appendChild(img);
     }
     isBottom = () =>{
+        console.log('detect');
         const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
         const clientHeight  = document.documentElement.clientHeight ;
         const scrollHeight = document.body.scrollHeight   || document.documentElement.scrollHeight;
-        console.log(scrollTop, clientHeight, scrollHeight)
         if(!isBottom && (scrollTop + clientHeight >= scrollHeight - 50)){
             console.log("已经到最底部了");
             isBottom = true;

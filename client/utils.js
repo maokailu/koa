@@ -24,7 +24,28 @@ const request = (route, params) => {
     });
     return promise;
 };
-
+var debounce = function(idle, action){
+    var last
+    return function(){
+      var ctx = this, args = arguments
+      clearTimeout(last)
+      last = setTimeout(function(){
+          action.apply(ctx, args)
+      }, idle)
+    }
+  }
+var throttle = function(delay, action){
+    var last = 0;
+    return function(){
+      var curr = +new Date()
+      if (curr - last > delay){
+        action.apply(this, arguments)
+        last = curr 
+      }
+    }
+  }
 export {
-    request
+    request,
+    debounce,
+    throttle
 };
