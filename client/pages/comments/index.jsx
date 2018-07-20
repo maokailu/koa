@@ -1,10 +1,11 @@
 import React from 'react';
-import { request } from '../../utils';
+import { request, debounce } from '../../utils';
 import './style.scss';
 import {ThemeContext, themes} from '../../components/button/context';
 import ThemedButton from '../../components/button';
 let img = new Image();
 let isBottom = false;
+let page = 0;
 export default class Comments extends React.Component {
     constructor(props) {
         super(props);
@@ -16,12 +17,33 @@ export default class Comments extends React.Component {
         nextComments: [],
         theme: themes.light
     }
+    static defaultProps = {
+        counts: 10
+    }
     componentDidMount() {
-        this.getComments();
-        window.addEventListener('scroll', this.isBottom);
+        this.init();
+        window.addEventListener('scroll', debounce(200, this.isBottom));
+    }
+    init = () => {
+        request('queryComments', {page: page, counts: this.props.counts }).then(json => {
+            this.setState({
+                comments: json
+            },()=>{
+                request('queryComments', {page: page++, counts: this.props.counts}).then(json => {
+                    this.setState({
+                        nextComments: json
+                    })
+                });
+                this.proLoadImg();
+            })
+        }, error => {
+            console.error('出错了', error);
+        });
     }
     getComments = () =>{
-        if(this.state.nextComments.length!==0) {
+        if(this.state.nextComments.length===0) {
+            return;
+        } else {
             let comments = this.state.comments.concat(this.state.nextComments);
             this.setState({
                 comments: comments
@@ -29,7 +51,7 @@ export default class Comments extends React.Component {
                 // 加载完下一屏继续监听
                 isBottom = false;
             })
-            request('queryComments').then(json => {
+            request('queryComments', {page: page++, counts: this.props.counts}).then(json => {
                 this.setState({
                     nextComments: json
                 })
@@ -37,21 +59,6 @@ export default class Comments extends React.Component {
                 console.error('出错了', error);
             });
             comments = comments.concat(this.state.nextComments);
-        } else {
-            request('queryComments').then(json => {
-                this.setState({
-                    comments: json
-                },()=>{
-                    request('queryComments').then(json => {
-                        this.setState({
-                            nextComments: json
-                        })
-                    });
-                    this.proLoadImg();
-                })
-            }, error => {
-                console.error('出错了', error);
-            });
         }
     }
     inputComments = event => {
@@ -86,10 +93,10 @@ export default class Comments extends React.Component {
         div.appendChild(img);
     }
     isBottom = () =>{
+        console.log('detect');
         const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
         const clientHeight  = document.documentElement.clientHeight ;
         const scrollHeight = document.body.scrollHeight   || document.documentElement.scrollHeight;
-        console.log(scrollTop, clientHeight, scrollHeight)
         if(!isBottom && (scrollTop + clientHeight >= scrollHeight - 50)){
             console.log("已经到最底部了");
             isBottom = true;
