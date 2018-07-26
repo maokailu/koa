@@ -3,6 +3,7 @@ import { request, debounce } from '../../utils';
 import './style.scss';
 import {ThemeContext, themes} from '../../components/button/context';
 import ThemedButton from '../../components/button';
+import ProcessBar from '../../components/process-bar'
 let img = new Image();
 let isBottom = false;
 let page = 0;
@@ -118,6 +119,11 @@ export default class Comments extends React.Component {
                 <ThemeContext.Provider value={this.state.theme}>
                     <Toolbar changeTheme={this.toggleTheme} />
                 </ThemeContext.Provider>
+                {/* <form action="/" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" multiple/>
+                    <input type="submit" value="Upload"/>
+                </form> */}
+                <ProcessBar />
                 <div onClick={this.addImg}>查看图片</div>
                 <div id="img"></div>
                 <div>留言板</div>

@@ -12,9 +12,25 @@ const fn_index = async (ctx, next) => {
     ctx.response.body = ret;
 };
 const queryComments = async (ctx, next) => {
-    const tmp = await sql.query("select * from comments where id >= (? * 10) limit ?", [ctx.request.body.page || 0, ctx.request.body.counts || 1000]).then(function(result) {
-        return result;
-    });
+    // const tmp = await sql.query("select * from comments where id >= (? * 10) limit ?", [ctx.request.body.page || 0, ctx.request.body.counts || 1000]).then(function(result) {
+    //     return result;
+    // });
+    const tmp = [
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+        {id: 0, text: 'text'},
+    ];
     ctx.response.body = tmp;
 };
 const addComment = async (ctx, next) => {
@@ -29,6 +45,7 @@ const deleteComment = async (ctx, next) => {
     });
     ctx.response.body = tmp;
 };
+
 module.exports = {
     'GET /': fn_index,
     'POST /queryComments': queryComments,
