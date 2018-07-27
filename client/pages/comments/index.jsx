@@ -1,9 +1,10 @@
 import React from 'react';
 import { request, debounce } from '../../utils';
 import './style.scss';
+// context
 import {ThemeContext, themes} from '../../components/button/context';
 import ThemedButton from '../../components/button';
-import ProcessBar from '../../components/process-bar'
+import ProcessBar from '../../components/process-bar';
 let img = new Image();
 let isBottom = false;
 let page = 0;
@@ -22,7 +23,8 @@ export default class Comments extends React.Component {
         counts: 10
     }
     componentDidMount() {
-        this.init();
+        this.init();        
+        request('check');
         window.addEventListener('scroll', debounce(200, this.isBottom));
     }
     init = () => {
@@ -119,13 +121,9 @@ export default class Comments extends React.Component {
                 <ThemeContext.Provider value={this.state.theme}>
                     <Toolbar changeTheme={this.toggleTheme} />
                 </ThemeContext.Provider> */}
-                {/* <form action="/" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" multiple/>
-                    <input type="submit" value="Upload"/>
-                </form> */}
-                <ProcessBar />
                 {/* <div onClick={this.addImg}>查看图片</div>
-                <div id="img"></div>
+                <div id="img"></div> */}
+                {/* <ProcessBar /> */}
                 <div>留言板</div>
                 <input className="input-box" onChange={this.inputComments}
                     placeholder={'在这里输入你的留言'} type="text" value={this.state.newComment} />
@@ -138,8 +136,7 @@ export default class Comments extends React.Component {
                         </div>
                     )}
                  </div>
-                 <span onClick={this.getComments}>加载更多</span> */}
-                 {/* 改成滚动到底部 */}
+                 <span onClick={this.getComments}>加载更多</span>
             </div>
        );
     }

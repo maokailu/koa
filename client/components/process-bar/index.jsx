@@ -94,7 +94,7 @@ export default class ProgressBar extends React.Component {
     };
     upload = () => {
         const file = document.getElementById('fileInput').files[0];
-        var url = '/';
+        var url = 'upload';
         var form = new FormData();
         form.append('file', file);
         if (file) {
@@ -118,7 +118,7 @@ export default class ProgressBar extends React.Component {
                     　console.log('上传出错');
                 }
             };
-            xhr.open('POST', '/');
+            xhr.open('POST', url);
             xhr.send(form);
         }
     };
