@@ -115,16 +115,16 @@ export default class Comments extends React.Component {
     render() {
         return (
             <div>
-                <ThemedButton />
+                {/* <ThemedButton />
                 <ThemeContext.Provider value={this.state.theme}>
                     <Toolbar changeTheme={this.toggleTheme} />
-                </ThemeContext.Provider>
+                </ThemeContext.Provider> */}
                 {/* <form action="/" method="post" enctype="multipart/form-data">
                     <input type="file" name="file" multiple/>
                     <input type="submit" value="Upload"/>
                 </form> */}
                 <ProcessBar />
-                <div onClick={this.addImg}>查看图片</div>
+                {/* <div onClick={this.addImg}>查看图片</div>
                 <div id="img"></div>
                 <div>留言板</div>
                 <input className="input-box" onChange={this.inputComments}
@@ -138,7 +138,7 @@ export default class Comments extends React.Component {
                         </div>
                     )}
                  </div>
-                 <span onClick={this.getComments}>加载更多</span>
+                 <span onClick={this.getComments}>加载更多</span> */}
                  {/* 改成滚动到底部 */}
             </div>
        );

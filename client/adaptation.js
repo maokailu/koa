@@ -7,10 +7,11 @@
     function setScale() {
       var scale;
       if (!dpr && !scale) {
-        var isIPhone = true;
-        if(navigator.userAgent.indexOf('Android') !== -1){
-            isIPhone = false;
-        }
+        var isIPhone = false;
+        // if(navigator.userAgent.indexOf('Android') === -1){
+        //     isIPhone = true;
+        // }
+        console.log(isIPhone)
         // var isAndroid = window.navigator.appVersion.match(/android/gi);
         // var isIPhone = (navigator.userAgent.match(/Safari/i) == 'Safari'); //用于在macOS调试
         // var isIPhone = window.navigator.appVersion.match(/iphone/gi);
@@ -56,7 +57,7 @@
   
     window.onresize = function() {
       docEl = document.documentElement;
-      setRemUnit();
+      // setRemUnit();
     };
   })(window, document);
   

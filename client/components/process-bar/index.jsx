@@ -5,7 +5,9 @@ export default class ProgressBar extends React.Component {
         super();
         this.state = {
             showArea: true,
-            process: 0
+            process: 0,
+            showFileName: false,
+            showImg: false
         };
     }
     componentDidMount() {
@@ -47,31 +49,42 @@ export default class ProgressBar extends React.Component {
             const file = files[i];
             const imageType = /^image\//;
 
-            var preview = document.getElementById('preview');
-            if (!imageType.test(file.type)) {
-                const div = document.createElement('div');
-                div.innerText = file.name;
-                preview.appendChild(div);
-                continue;
-            }
-            // 填充选择的图片到展示区
-            const img = document.createElement('img');
-            img.classList.add('obj');
-            img.file = file;
             if (this.state.showArea) {
                 this.setState({
                     showArea: false
                 });
             }
-            preview.appendChild(img);
-            // 读取File对象中的内容
-            const reader = new FileReader();
-            reader.onload = (function(aImg) {
-                return function(e) {
-                    aImg.src = e.target.result;
-                };
-            })(img);
-            reader.readAsDataURL(file);
+            // 展示标题
+            if (!imageType.test(file.type)) {
+                this.setState({
+                    process: 0,
+                    showImg: false,
+                    showFileName: true,
+                    fileName: file.name
+                })
+                continue;
+            }
+            
+            // 填充选择的图片到展示区
+            this.setState({
+                process: 0,
+                showFileName: false,
+                showImg: true
+            }, ()=>{
+                const imgBox = document.getElementById('img');
+                const img = document.createElement('img');
+                img.classList.add('obj');
+                img.file = file;
+                imgBox.appendChild(img);
+                // 读取File对象中的内容
+                const reader = new FileReader();
+                reader.onload = (function(aImg) {
+                    return function(e) {
+                        aImg.src = e.target.result;
+                    };
+                })(img);
+                reader.readAsDataURL(file);
+            });
         }
     };
     filesInput = e => {
@@ -111,19 +124,17 @@ export default class ProgressBar extends React.Component {
     };
     render() {
         const anim = {
-            width: this.state.process * 5 + 'px',
+            width: this.state.process * 2 + 'px',
             transition: 'width 0s'
         }
         return (
             <div>
                 <div className="filePicker">
-                    <label>点击选择文件</label>
+                    <label htmlFor="fileInput">点击选择文件</label>
                     <input
                         id="fileInput"
                         type="file"
                         name="file"
-                        multiple="multiple"
-                        // accept="image/*"
                         onChange={this.filesInput}
                     />
                 </div>
@@ -135,14 +146,17 @@ export default class ProgressBar extends React.Component {
                     onDrop={e => this.drop(e)}
                 >
                     {this.state.showArea && <div className="area" />}
-                    <div id="preview" />
+                    <div id="preview">
+                        {this.state.showFileName && <div>{this.state.fileName}</div>}
+                        {this.state.showImg && <div id="img"></div>}
+                        <span>{'已上传:'+this.state.process}</span>
+                        <div className="process-bar-back">
+                            <div className="process-bar" style={anim}></div>
+                        </div>
+                    </div>
                 </div>
                 <div className="upload" onClick={this.upload}>
                     点击上传
-                </div>
-                <div>{'已上传:'+this.state.process}</div>
-                <div class="process-bar-back">
-                    <div class="process-bar" style={anim}></div>
                 </div>
             </div>
         );
